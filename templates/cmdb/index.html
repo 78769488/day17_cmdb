@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 引入 Bootstrap -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <title>首页-主机管理系统</title>
+    <style>
+        .panel-group .panel + .panel {
+{#            margin-top: 5px;#}
+            margin-top: 0;
+        }
+        .panel-group .panel {
+            margin-bottom: 0;
+{#          border-radius: 4px;#}
+            border-radius: 0;
+        }
+        .panel-title {
+            margin-top: 0;
+            margin-bottom: 0;
+            font-size: 18px;
+            color: inherit;
+        }
+        .myCaption {
+            font-size: 16px;
+            color: saddlebrown;
+        }
+        .panel-body {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-left: 40px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    {#导航栏#}
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">CMDB主机管理</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-user"></span>
+                        <span class="text-success">{{ userinfo.username }}</span>
+                    </a>
+                </li>
+                <li><a href="/cmdb/login/"><span class="glyphicon glyphicon-log-out"></span> 登出</a></li>
+            </ul>
+        </div>
+{#        <div class="container-fluid">#}
+{#            {% if user.name %}#}
+{#                <p class="text-danger">{{ user.name }}</p>#}
+{#            {% endif %}#}
+{#        </div>#}
+    </nav>
+
+
+    <div class="row clearfix">
+        {#左侧菜单#}
+        <div class="col-lg-2 column">
+            <div class="panel-group" id="panel-294914">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title" data-toggle="collapse" data-parent="#panel-294914"
+                           href="#panel-element-744657">主机管理</a>
+                    </div>
+                    <div id="panel-element-744657" class="panel-collapse in">
+                        <div class="panel-body">
+                            <a href="/index/">所有主机信息</a>
+                        </div>
+                        <div class="panel-body" data-toggle="modal" data-target="#addModal">
+                            <a href="#">添加新主机</a>
+                        </div>
+                        <!-- 模态框（Modal） -->
+                        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        <h4 class="modal-title" id="addModalLabel">
+                                            添加新主机
+                                        </h4>
+                                    </div>
+                                    <form action="/insert/" class="form-horizontal" role="form" method="post">
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="hostname" class="col-sm-2 control-label">主机名称</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="hostname"
+                                                           name="hostname"
+                                                           placeholder="请输入主机名称">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="hostip" class="col-sm-2 control-label">主机IP</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="hostip" name="hostip"
+                                                           placeholder="请输入主机IP">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="hostport" class="col-sm-2 control-label">主机端口</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="hostport"
+                                                           name="hostport"
+                                                           placeholder="请输入主机端口">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="department" class="col-sm-2 control-label">归属部门</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="department"
+                                                           name="department"
+                                                           placeholder="请输入主机归属部门">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="status" class="col-sm-2 control-label">主机状态</label>
+                                                <div class="radio col-sm-2">
+                                                    <label>
+                                                        <input type="radio" name="status" id="optionsRadios1"
+                                                               value="online" checked>在线
+                                                    </label>
+                                                </div>
+                                                <div class="radio col-sm-2">
+                                                    <label>
+                                                        <input type="radio" name="status" id="optionsRadios2"
+                                                               value="offline">下线
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="area" class="col-sm-2 control-label">机房地区</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="area" name="area"
+                                                           placeholder="请输入机房地区">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description" class="col-sm-2 control-label">详细信息</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="description"
+                                                           name="description"
+                                                           placeholder="请输入详细信息">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                                            </button>
+                                            <button type="submit" class="btn btn-primary" id="addHost">提交</button>
+                                        </div>
+                                    </form>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal -->
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel-294914"
+                           href="#panel-element-420083">用户管理</a>
+                    </div>
+                    <div id="panel-element-420083" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            添加用户
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {#右侧表格#}
+        <div class="col-lg-10 column">
+            <div class="table-responsive">
+                <table class="table  table-hover table-striped">
+                    <caption class="myCaption">我维护的主机信息</caption>
+                    <thead>
+                    <tr>
+                        <th class="hide">主机ID</th>
+                        <th>主机名称</th>
+                        <th>IP</th>
+                        <th>Port</th>
+                        <th>业务线</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for host in host_list %}
+                        <tr>
+                            <td class="hide">{{ host.id }}</td>
+                            <td>{{ host.hostname }}</td>
+                            <td>{{ host.ip }}</td>
+                            <td>{{ host.port }}</td>
+                            <td>{{ host.business.caption }}</td>
+                            <td>
+                                <a href="/detail?nid={{ host.id }}">编辑</a> |
+                                <a class="del"  data-toggle="modal" data-target="#delModal" href="#" host-id="{{ host.id }}">删除</a>
+                                <!-- 删除主机 模态框（Modal） -->
+                                <div class="modal fade" id="delModal" tabindex="-1" role="dialog"
+                                     aria-labelledby="addModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-hidden="true">
+                                                    &times;
+                                                </button>
+                                                <h4 class="modal-title" id="delModalLabel">
+                                                    删除主机信息
+                                                </h4>
+                                            </div>
+                                            <form action="/cmdb/del_host/" class="form-horizontal" role="form" method="post">
+                                                <div class="modal-body">
+                                                    <input class="hide" id="host-id" type="text" name="host-id"  title="info">
+                                                    <h4 class="text-danger">确认删除该主机信息吗?</h4>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">
+                                                        取消
+                                                    </button>
+                                                    <button type="submit" class="btn btn-danger" id="del-host">确认
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div><!-- /.modal-content -->
+                                    </div><!-- /.modal -->
+                                </div>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
+<script src="/static/js/jquery-1.12.4.js"></script>
+<!-- 包括所有已编译的插件 -->
+<script src="/static/js/bootstrap.min.js"></script>
+<script>
+    $('.del').click(function () {
+        var host_id = $(this).attr('host-id');
+        $('#host-id').val(host_id);
+    });
+</script>
+</body>
+</html>
