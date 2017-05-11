@@ -1,12 +1,12 @@
-﻿from django.shortcuts import render, redirect
+﻿from django.shortcuts import render, redirect, HttpResponse
 from cmdb import models
+import json
 USERINFO = {}
 
 
 # Create your views here.
 def login(request):
     # request包含用户(浏览器)提交过来的所有信息
-    error_msg = ""
     if request.method == "POST":
         email = request.POST.get("email", None)
         password = request.POST.get("password", None)
@@ -15,7 +15,6 @@ def login(request):
             print("登录成功")
             global USERINFO
             USERINFO = {'id': obj.id, 'username': obj.username, 'email': obj.email, 'bid': obj.business_id}
-
             return redirect(index)
         else:
             error_msg = "用户名或密码错误！"
@@ -33,56 +32,66 @@ def login(request):
 
 
 def index(request, *args, **kwargs):
-    print("跳转到index")
-    bid = USERINFO.get("bid", None)
+    bid = USERINFO.get("bid")  # 用户所属业务线
     host_list = models.Host.objects.filter(business=bid)
-    return render(request,
-                  'cmdb/index.html',
-                  {'host_list': host_list,
-                   'userinfo': USERINFO})
+    business_list = models.Business.objects.filter(id=bid)
+    if request.method == "GET":
+        return render(request,
+                      'cmdb/index.html',
+                      {'host_list': host_list,
+                       'userinfo': USERINFO,
+                       'business_list': business_list})
 
 
-def insert(request):
+def add_host(request):
+    res = {'status': True, 'error': None, 'code': None}
     if request.method == "POST":
-        cursor = conn.cursor()
-        userid = userinfo.get("id", None)
-        hostname = request.POST.get("hostname", None)
-        hostip = request.POST.get("hostip", None)
-        hostport = request.POST.get("hostport", None)
-        department = request.POST.get("department", None)
-        area = request.POST.get("area", None)
-        status = request.POST.get("status", None)
-        description = request.POST.get("description", None)
-        sql = ("INSERT INTO cmdb_hostinfo ("
-               "hostname,ip,`port`,`status`,department,area,online_time,update_time,description,user_id )"
-               "VALUES ('%s','%s', %s, '%s', '%s', '%s', NOW(), NOW(), '%s', %s)" %
-               (hostname, hostip, hostport, status, department, area, description, userid))
+        hostname = request.POST.get('hostname')
+        ip = request.POST.get('ip')
+        port = request.POST.get('port')
+        business = request.POST.get('business')
         try:
-            cursor.execute(sql)
-            conn.commit()
-            msg = "添加成功"
-            cursor.close()
+            models.Host.objects.create(hostname=hostname,
+                                       ip=ip,
+                                       port=port,
+                                       business_id=business
+                                       )
         except Exception as e:
-            print(e)
-            msg = "系统错误"
-            exit(1)
-        return redirect('/index/',
-                        {"msg": msg})
-
-
-def detail(request):
-    host_id = request.GET.get('nid')
-    sql = ("SELECT	* FROM	cmdb_hostinfo WHERE `id` = %s" % host_id)
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    host = cursor.fetchone()
-    return render(request,
-                  'cmdb/detail.html',
-                  {'host': host})
+            res['status'] = False
+            res['error'] = str(e)
+            print(res)
+        finally:
+            # return redirect('/cmdb/index/') ajax提交不能redirect, 在html对应的js中reload()
+            return HttpResponse(json.dumps(res))
 
 
 def del_host(request):
-    print("del_host")
-    host_id = request.POST.get('host-id')
-    models.Host.objects.filter(id=host_id).delete()
-    return redirect('index/',)
+    if request.method == "POST":
+        host_id = request.POST.get('host-id')
+        models.Host.objects.filter(id=host_id).delete()
+        return redirect('/cmdb/index/')
+
+
+def edit_host(request):
+    res = {'status': True, 'error': None, 'code': None}
+    if request.method == "POST":
+        hostname = request.POST.get('hostname')
+        ip = request.POST.get('ip')
+        port = request.POST.get('port')
+        business_id = request.POST.get('business')
+        hid = request.POST.get('hid')
+        print(hid, hostname, ip, port, business_id)
+        try:
+            models.Host.objects.filter(id=hid).update(
+                hostname=hostname,
+                ip=ip,
+                port=port,
+                business_id=business_id
+            )
+        except Exception as e:
+            res['status'] = False
+            res['error'] = str(e)
+            print(res)
+        finally:
+            # return redirect('/cmdb/index/') ajax提交不能redirect, 在html对应的js中reload()
+            return HttpResponse(json.dumps(res))
