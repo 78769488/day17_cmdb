@@ -37,7 +37,7 @@ class Host(models.Model):
     business = models.ForeignKey(verbose_name="业务线ID", to="Business", to_field="id")
 
     def __str__(self):
-        return "%s - %s - %s " % ( self.hostname, self.ip, self.port)
+        return "%s - %s - %s " % (self.hostname, self.ip, self.port)
 
     class Meta:
         verbose_name = "主机信息"

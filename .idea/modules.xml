@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../day17/.idea/day17.iml" filepath="$PROJECT_DIR$/../day17/.idea/day17.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/day17_cmdb.iml" filepath="$PROJECT_DIR$/.idea/day17_cmdb.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../day18_cmdb/.idea/day18_cmdb.iml" filepath="$PROJECT_DIR$/../day18_cmdb/.idea/day18_cmdb.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../day18_bbs/.idea/day18_bbs.iml" filepath="$PROJECT_DIR$/../day18_bbs/.idea/day18_bbs.iml" />
     </modules>
   </component>
 </project>
